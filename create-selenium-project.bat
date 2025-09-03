@@ -1,19 +1,20 @@
 @echo off
 setlocal
 
-REM ==== Настройки проекта ====
+REM ==== Project settings ====
 set GROUP_ID=com.rada.selenium
 set ARTIFACT_ID=selenium-testng-project
 set PACKAGE_DIR=com\rada\selenium
 set MAIN_CLASS_NAME=GoogleSearchTest
 
-REM ==== Создание проекта через Maven ====
-echo [1/6] Генерация Maven-проекта...
+mvn archetype:generate -DgroupId=%GROUP_ID% -DartifactId=%ARTIFACT_ID% -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+REM ==== Create Maven project ====
+echo [1/6] Generating Maven project...
 mvn archetype:generate -DgroupId=%GROUP_ID% -DartifactId=%ARTIFACT_ID% -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 
 cd %ARTIFACT_ID%
 
-echo [2/6] Обновление pom.xml...
+echo [2/6] Updating pom.xml...
 del pom.xml
 
 (
@@ -72,10 +73,10 @@ echo   ^</build^>
 echo ^</project^>
 ) > pom.xml
 
-echo [3/6] Удаление шаблонного теста...
+echo [3/6] Removing template test...
 del src\test\java\%PACKAGE_DIR%\AppTest.java
 
-echo [4/6] Создание теста %MAIN_CLASS_NAME%.java...
+echo [4/6] Creating test %MAIN_CLASS_NAME%.java...
 
 mkdir src\test\java\%PACKAGE_DIR% 2>nul
 
@@ -114,12 +115,12 @@ echo     }
 echo }
 ) > src\test\java\%PACKAGE_DIR%\%MAIN_CLASS_NAME%.java
 
-echo [5/6] Сборка проекта...
+echo [5/6] Building project...
 mvn clean compile >nul
 
-echo [6/6] Запуск теста...
+echo [6/6] Running test...
 mvn test
 
 echo.
-echo === Проект успешно создан и запущен! ===
+echo === Project successfully created and test executed! ===
 pause
