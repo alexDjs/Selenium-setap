@@ -1,0 +1,15 @@
+# Created at 2025-09-09T16:07:18.033
+TestSet has not finished before stream error has appeared >> initializing exit by non-null configuration: EXIT
+java.io.EOFException
+	at org.apache.maven.surefire.api.stream.AbstractStreamDecoder.read(AbstractStreamDecoder.java:444)
+	at org.apache.maven.surefire.api.stream.AbstractStreamDecoder.read(AbstractStreamDecoder.java:419)
+	at org.apache.maven.surefire.api.stream.AbstractStreamDecoder.readMessageType(AbstractStreamDecoder.java:116)
+	at org.apache.maven.surefire.booter.stream.CommandDecoder.decode(CommandDecoder.java:77)
+	at org.apache.maven.surefire.booter.spi.CommandChannelDecoder.decode(CommandChannelDecoder.java:60)
+	at org.apache.maven.surefire.booter.CommandReader$CommandRunnable.run(CommandReader.java:290)
+	at java.base/java.lang.Thread.run(Thread.java:1570)
+
+
+# Created at 2025-09-09T16:07:18.048
+Surefire is going to exit self fork JVM. Received SHUTDOWN {EXIT} command from Maven shutdown hook.
+

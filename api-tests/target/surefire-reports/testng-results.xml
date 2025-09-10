@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="18" passed="18" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2025-09-09T15:02:08 CEST" name="Surefire suite" finished-at="2025-09-09T15:02:55 CEST" duration-ms="47151">
+    <groups>
+    </groups>
+    <test started-at="2025-09-09T15:02:08 CEST" name="Surefire test" finished-at="2025-09-09T15:02:55 CEST" duration-ms="47151">
+      <class name="com.bank.api.ApiTests">
+        <test-method signature="deleteExpensesShouldDeleteAllIds()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:08 CEST" name="deleteExpensesShouldDeleteAllIds" finished-at="2025-09-09T15:02:21 CEST" duration-ms="13323" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- deleteExpensesShouldDeleteAllIds -->
+        <test-method signature="fullExpenseLifecycleTest()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:21 CEST" name="fullExpenseLifecycleTest" finished-at="2025-09-09T15:02:26 CEST" duration-ms="5071" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- fullExpenseLifecycleTest -->
+        <test-method signature="getExpensesShouldFailWithoutToken()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:26 CEST" name="getExpensesShouldFailWithoutToken" finished-at="2025-09-09T15:02:27 CEST" duration-ms="298" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getExpensesShouldFailWithoutToken -->
+        <test-method signature="getExpensesShouldSucceed()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:27 CEST" name="getExpensesShouldSucceed" finished-at="2025-09-09T15:02:28 CEST" duration-ms="1344" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getExpensesShouldSucceed -->
+        <test-method signature="getExpensesWithPaginationShouldSucceed()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:28 CEST" name="getExpensesWithPaginationShouldSucceed" finished-at="2025-09-09T15:02:30 CEST" duration-ms="2080" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- getExpensesWithPaginationShouldSucceed -->
+        <test-method signature="loginShouldFailWithEmptyCredentials()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:30 CEST" name="loginShouldFailWithEmptyCredentials" finished-at="2025-09-09T15:02:31 CEST" duration-ms="836" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- loginShouldFailWithEmptyCredentials -->
+        <test-method signature="loginShouldFailWithWrongPassword()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:31 CEST" name="loginShouldFailWithWrongPassword" finished-at="2025-09-09T15:02:32 CEST" duration-ms="506" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- loginShouldFailWithWrongPassword -->
+        <test-method signature="loginShouldRejectSqlInjection()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:32 CEST" name="loginShouldRejectSqlInjection" finished-at="2025-09-09T15:02:32 CEST" duration-ms="281" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- loginShouldRejectSqlInjection -->
+        <test-method signature="loginShouldReturnToken()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:32 CEST" name="loginShouldReturnToken" finished-at="2025-09-09T15:02:32 CEST" duration-ms="613" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- loginShouldReturnToken -->
+        <test-method signature="postExpenseShouldAppearInList()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:32 CEST" name="postExpenseShouldAppearInList" finished-at="2025-09-09T15:02:35 CEST" duration-ms="2461" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- postExpenseShouldAppearInList -->
+        <test-method signature="postExpenseShouldRejectXss()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:35 CEST" name="postExpenseShouldRejectXss" finished-at="2025-09-09T15:02:37 CEST" duration-ms="2167" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- postExpenseShouldRejectXss -->
+        <test-method signature="postExpenseShouldSucceed()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:37 CEST" name="postExpenseShouldSucceed" finished-at="2025-09-09T15:02:38 CEST" duration-ms="1269" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- postExpenseShouldSucceed -->
+        <test-method signature="postExpenseWithDuplicateIdShouldFail()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:38 CEST" name="postExpenseWithDuplicateIdShouldFail" finished-at="2025-09-09T15:02:41 CEST" duration-ms="2293" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- postExpenseWithDuplicateIdShouldFail -->
+        <test-method signature="postExpenseWithInvalidEmailShouldFail()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:41 CEST" name="postExpenseWithInvalidEmailShouldFail" finished-at="2025-09-09T15:02:42 CEST" duration-ms="1287" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- postExpenseWithInvalidEmailShouldFail -->
+        <test-method signature="postExpenseWithMaxAmountShouldSucceed()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:42 CEST" name="postExpenseWithMaxAmountShouldSucceed" finished-at="2025-09-09T15:02:43 CEST" duration-ms="1293" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- postExpenseWithMaxAmountShouldSucceed -->
+        <test-method signature="postExpenseWithMinAmountShouldSucceed()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:43 CEST" name="postExpenseWithMinAmountShouldSucceed" finished-at="2025-09-09T15:02:45 CEST" duration-ms="1585" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- postExpenseWithMinAmountShouldSucceed -->
+        <test-method signature="putExpenseShouldChangeTypeAmountLocationForAllIds()[pri:0, instance:com.bank.api.ApiTests@327b636c]" started-at="2025-09-09T15:02:45 CEST" name="putExpenseShouldChangeTypeAmountLocationForAllIds" finished-at="2025-09-09T15:02:49 CEST" duration-ms="4417" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- putExpenseShouldChangeTypeAmountLocationForAllIds -->
+      </class> <!-- com.bank.api.ApiTests -->
+      <class name="com.bank.api.ClearExpensesHistoryTest">
+        <test-method signature="clearAllExpensesHistory()[pri:0, instance:com.bank.api.ClearExpensesHistoryTest@a4102b8]" started-at="2025-09-09T15:02:49 CEST" name="clearAllExpensesHistory" finished-at="2025-09-09T15:02:55 CEST" duration-ms="5726" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- clearAllExpensesHistory -->
+      </class> <!-- com.bank.api.ClearExpensesHistoryTest -->
+    </test> <!-- Surefire test -->
+  </suite> <!-- Surefire suite -->
+</testng-results>

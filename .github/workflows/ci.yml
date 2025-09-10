@@ -1,0 +1,67 @@
+name: CI - Run all tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  run-all-modules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Cache Maven local repository
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2-
+
+      - name: Run tests for each top-level module
+        run: |
+          set -o pipefail
+          # choose mvn or mvnw
+          if [ -f ./mvnw ]; then
+            MVN=./mvnw
+            chmod +x ./mvnw
+          else
+            MVN=mvn
+          fi
+
+          failed=0
+          echo "Detecting top-level module directories..."
+          for d in */ ; do
+            # skip hidden and config folders
+            if [ "$d" = ".github/" ] || [ "$d" = "node_modules/" ]; then
+              continue
+            fi
+            if [ -f "${d}pom.xml" ]; then
+              echo "\n=== Running tests in module: ${d%/} ==="
+              if ! $MVN -B -f "${d}pom.xml" test; then
+                echo "Tests failed in ${d%/}" >&2
+                failed=1
+              fi
+            fi
+          done
+
+          echo "\n=== Tests finished. Exit code: $failed ==="
+          exit $failed
+
+      - name: Upload all surefire reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: all-surefire-reports
+          path: '**/target/surefire-reports'

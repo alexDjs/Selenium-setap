@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="4" passed="4" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2025-09-09T20:18:31 CEST" name="Surefire suite" finished-at="2025-09-09T20:19:18 CEST" duration-ms="47209">
+    <groups>
+    </groups>
+    <test started-at="2025-09-09T20:18:31 CEST" name="Surefire test" finished-at="2025-09-09T20:19:18 CEST" duration-ms="47209">
+      <class name="com.bank.ui.UiTests">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.bank.ui.UiTests@23f7d05d]" started-at="2025-09-09T20:18:31 CEST" name="setUp" finished-at="2025-09-09T20:18:37 CEST" duration-ms="5990" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="dashboardShouldNotBeAccessibleWithoutLogin()[pri:0, instance:com.bank.ui.UiTests@23f7d05d]" started-at="2025-09-09T20:18:37 CEST" name="dashboardShouldNotBeAccessibleWithoutLogin" finished-at="2025-09-09T20:18:41 CEST" duration-ms="3637" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- dashboardShouldNotBeAccessibleWithoutLogin -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.bank.ui.UiTests@23f7d05d]" started-at="2025-09-09T20:18:41 CEST" name="tearDown" finished-at="2025-09-09T20:18:43 CEST" duration-ms="2422" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.bank.ui.UiTests@23f7d05d]" started-at="2025-09-09T20:18:43 CEST" name="setUp" finished-at="2025-09-09T20:18:47 CEST" duration-ms="4108" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="layoutShouldBeResponsive()[pri:0, instance:com.bank.ui.UiTests@23f7d05d]" started-at="2025-09-09T20:18:47 CEST" name="layoutShouldBeResponsive" finished-at="2025-09-09T20:18:51 CEST" duration-ms="4087" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- layoutShouldBeResponsive -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.bank.ui.UiTests@23f7d05d]" started-at="2025-09-09T20:18:51 CEST" name="tearDown" finished-at="2025-09-09T20:18:55 CEST" duration-ms="3471" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.bank.ui.UiTests@23f7d05d]" started-at="2025-09-09T20:18:55 CEST" name="setUp" finished-at="2025-09-09T20:18:59 CEST" duration-ms="3762" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="loginShouldFailWithWrongPassword()[pri:0, instance:com.bank.ui.UiTests@23f7d05d]" started-at="2025-09-09T20:18:59 CEST" name="loginShouldFailWithWrongPassword" finished-at="2025-09-09T20:19:07 CEST" duration-ms="8008" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- loginShouldFailWithWrongPassword -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.bank.ui.UiTests@23f7d05d]" started-at="2025-09-09T20:19:07 CEST" name="tearDown" finished-at="2025-09-09T20:19:07 CEST" duration-ms="738" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="setUp()[pri:0, instance:com.bank.ui.UiTests@23f7d05d]" started-at="2025-09-09T20:19:07 CEST" name="setUp" finished-at="2025-09-09T20:19:11 CEST" duration-ms="4088" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="loginShouldShowErrorForInvalidEmailFormat()[pri:0, instance:com.bank.ui.UiTests@23f7d05d]" started-at="2025-09-09T20:19:11 CEST" name="loginShouldShowErrorForInvalidEmailFormat" finished-at="2025-09-09T20:19:17 CEST" duration-ms="6024" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- loginShouldShowErrorForInvalidEmailFormat -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:com.bank.ui.UiTests@23f7d05d]" started-at="2025-09-09T20:19:17 CEST" name="tearDown" finished-at="2025-09-09T20:19:18 CEST" duration-ms="762" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- com.bank.ui.UiTests -->
+    </test> <!-- Surefire test -->
+  </suite> <!-- Surefire suite -->
+</testng-results>
