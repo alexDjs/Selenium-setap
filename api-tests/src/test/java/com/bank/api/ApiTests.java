@@ -85,7 +85,7 @@ public class ApiTests {
             Response postResponse = given().baseUri(BASE_URL)
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
-                .body("{\"Id\":\"" + i + "\",\"type\":\"Media Expert\",\"amount\":\"200\",\"direction\":\"out\",\"location\":\"Wroclaw\",\"product\":\"Product-" + i + "\"}")
+                .body("{\"ID\":\"" + i + "\",\"type\":\"Media Expert\",\"amount\":\"200\",\"direction\":\"out\",\"location\":\"Wroclaw\",\"product\":\"Product-" + i + "\"}")
             .post("/expenses");
             System.out.println("POST /expenses Response for Id=" + i + ": " + postResponse.asString());
         }
