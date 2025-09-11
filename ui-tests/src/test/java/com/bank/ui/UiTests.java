@@ -10,12 +10,29 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.chrome.ChromeDriver;
 import static org.testng.Assert.assertTrue;
 
+/**
+ * UI tests for MyBank web application.
+ * How to run locally:
+ * 1. Make sure Google Chrome is installed and chromedriver is available.
+ * 2. Run: mvn -pl ui-tests test
+ * The browser will open in fullscreen mode for each test.
+ */
 public class UiTests {
     private WebDriver driver;
 
     @BeforeMethod
     public void setUp() {
-        driver = new ChromeDriver();
+        org.openqa.selenium.chrome.ChromeOptions options = new org.openqa.selenium.chrome.ChromeOptions();
+        if (System.getenv("CI") != null) {
+            options.addArguments("--headless=new");
+        }
+        driver = new ChromeDriver(options);
+        // Open browser in fullscreen (headless: set large window size)
+        if (System.getenv("CI") != null) {
+            driver.manage().window().setSize(new org.openqa.selenium.Dimension(1920, 1080));
+        } else {
+            driver.manage().window().fullscreen();
+        }
     }
 
     @AfterMethod(alwaysRun = true)
@@ -24,12 +41,14 @@ public class UiTests {
             try {
                 driver.quit();
             } catch (Exception e) {
-                System.out.println("Ошибка при закрытии браузера: " + e.getMessage());
+                System.out.println("Error closing browser: " + e.getMessage());
             }
         }
     }
 
-    // Login with wrong password -> expect login-error
+    /**
+     * Test: Login with wrong password should show login error.
+     */
     @Test
     public void loginShouldFailWithWrongPassword() {
         driver.get("https://mybank-8s6n.onrender.com/");
@@ -42,7 +61,9 @@ public class UiTests {
         assertTrue(errorText != null && (errorText.startsWith("Login error:") || errorText.toLowerCase().contains("invalid")));
     }
 
-    // Access dashboard without login (expect auth-overlay)
+    /**
+     * Test: Dashboard should not be accessible without login (auth overlay).
+     */
     @Test
     public void dashboardShouldNotBeAccessibleWithoutLogin() {
         driver.get("https://mybank-8s6n.onrender.com/");
@@ -51,7 +72,9 @@ public class UiTests {
         assertTrue(driver.findElement(By.id("auth-overlay")).isDisplayed());
     }
 
-    // Responsive layout test (window resize)
+    /**
+     * Test: Responsive layout should display login button after window resize.
+     */
     @Test
     public void layoutShouldBeResponsive() {
         driver.get("https://mybank-8s6n.onrender.com/");
@@ -59,7 +82,9 @@ public class UiTests {
         assertTrue(driver.findElement(By.id("login-btn")).isDisplayed());
     }
 
-    // Invalid email format shows error (simplified)
+    /**
+     * Test: Invalid email format should show login error.
+     */
     @Test
     public void loginShouldShowErrorForInvalidEmailFormat() {
         driver.get("https://mybank-8s6n.onrender.com/");
@@ -71,6 +96,5 @@ public class UiTests {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-error")));
         assertTrue(driver.findElement(By.id("login-error")).isDisplayed());
     }
-
 
 }
