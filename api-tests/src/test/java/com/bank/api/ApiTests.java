@@ -6,24 +6,34 @@ import static org.hamcrest.Matchers.*;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
+/**
+ * API tests for MyBank backend.
+ * How to run locally:
+ * 1. Make sure you have Java and Maven installed.
+ * 2. Run: mvn -pl api-tests test
+ * These tests use RestAssured to verify API endpoints.
+ */
 public class ApiTests {
-    // How to run: mvn test -pl api-tests
     private final String BASE_URL = "https://mybank-8s6n.onrender.com";
     private final String EMAIL = "apiuser@test.com";
     private final String PASSWORD = "pass1234";
 
+    /**
+     * Registers and logs in, returns auth token.
+     */
     private String getToken() {
-        // Register (ignore result)
         given().baseUri(BASE_URL).contentType(ContentType.JSON)
             .body("{\"email\":\"" + EMAIL + "\",\"password\":\"" + PASSWORD + "\"}")
         .post("/register");
-        // Login
         Response res = given().baseUri(BASE_URL).contentType(ContentType.JSON)
             .body("{\"email\":\"" + EMAIL + "\",\"password\":\"" + PASSWORD + "\"}")
         .post("/login");
         return res.jsonPath().getString("token");
     }
 
+    /**
+     * Test: Login should return a valid token for correct credentials.
+     */
     @Test
     public void loginShouldReturnToken() {
         given()
@@ -37,6 +47,9 @@ public class ApiTests {
             .body("token", notNullValue());
     }
 
+    /**
+     * Test: Posting a new expense should succeed.
+     */
     @Test
     public void postExpenseShouldSucceed() {
         String token = getToken();
@@ -48,6 +61,9 @@ public class ApiTests {
         .then().statusCode(anyOf(is(200), is(201)));
     }
 
+    /**
+     * Test: Getting expenses should succeed for valid token.
+     */
     @Test
     public void getExpensesShouldSucceed() {
         String token = getToken();
@@ -58,28 +74,36 @@ public class ApiTests {
         .then().statusCode(200);
     }
 
+    /**
+     * Test: PUT should update type, amount, location for all expense IDs.
+     */
     @Test
     public void putExpenseShouldChangeTypeAmountLocationForAllIds() {
         String token = getToken();
-        // POST для Id=1,2,3
+        // POST для Id=1,2,3 с логированием ответа
         for (int i = 1; i <= 3; i++) {
-            given().baseUri(BASE_URL)
+            Response postResponse = given().baseUri(BASE_URL)
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .body("{\"Id\":\"" + i + "\",\"type\":\"Media Expert\",\"amount\":\"200\",\"direction\":\"out\",\"location\":\"Wroclaw\",\"product\":\"Product-" + i + "\"}")
             .post("/expenses");
+            System.out.println("POST /expenses Response for Id=" + i + ": " + postResponse.asString());
         }
-        // PUT для Id=1,2,3
+        // PUT для Id=1,2,3 с логированием ответа
         for (int i = 1; i <= 3; i++) {
-            given().baseUri(BASE_URL)
+            Response putResponse = given().baseUri(BASE_URL)
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .body("{\"Id\":\"" + i + "\",\"type\":\"Biedronka\",\"amount\":\"100\",\"direction\":\"out\",\"location\":\"Krakow\",\"product\":\"Product-" + i + "\"}")
-            .when().put("/expenses/" + i)
-            .then().statusCode(anyOf(is(200), is(204)));
+            .put("/expenses/" + i);
+            System.out.println("PUT /expenses/" + i + " Response: " + putResponse.asString());
+            putResponse.then().statusCode(anyOf(is(200), is(204)));
         }
     }
 
+    /**
+     * Test: DELETE should remove all expenses by ID.
+     */
     @Test
     public void deleteExpensesShouldDeleteAllIds() {
         String token = getToken();
@@ -101,6 +125,9 @@ public class ApiTests {
         }
     }
 
+    /**
+     * Test: Login should fail with wrong password.
+     */
     @Test
     public void loginShouldFailWithWrongPassword() {
         given()
@@ -113,6 +140,9 @@ public class ApiTests {
             .statusCode(401);
     }
 
+    /**
+     * Test: Login should fail with empty credentials.
+     */
     @Test
     public void loginShouldFailWithEmptyCredentials() {
         given()
@@ -125,6 +155,9 @@ public class ApiTests {
             .statusCode(401);
     }
 
+    /**
+     * Test: Posted expense should appear in the list.
+     */
     @Test
     public void postExpenseShouldAppearInList() {
         String token = getToken();
@@ -142,6 +175,9 @@ public class ApiTests {
         .then().statusCode(200);
     }
 
+    /**
+     * Test: Full expense lifecycle (create, update, delete, verify empty).
+     */
     @Test
     public void fullExpenseLifecycleTest() {
         String token = getToken();
@@ -179,7 +215,9 @@ public class ApiTests {
             .body("size()", is(0));
     }
 
-    // Security test: SQL injection attempt
+    /**
+     * Security test: Login should reject SQL injection attempt.
+     */
     @Test
     public void loginShouldRejectSqlInjection() {
         given()
@@ -192,7 +230,9 @@ public class ApiTests {
             .statusCode(anyOf(is(401), is(400)));
     }
 
-    // Negative test: access expenses without token
+    /**
+     * Negative test: Accessing expenses without token should fail.
+     */
     @Test
     public void getExpensesShouldFailWithoutToken() {
         given().baseUri(BASE_URL)
@@ -201,7 +241,9 @@ public class ApiTests {
         .then().statusCode(anyOf(is(401), is(403)));
     }
 
-    // Edge case: create expense with minimum amount
+    /**
+     * Edge case: Creating expense with minimum amount should succeed.
+     */
     @Test
     public void postExpenseWithMinAmountShouldSucceed() {
         String token = getToken();
@@ -213,7 +255,9 @@ public class ApiTests {
         .then().statusCode(anyOf(is(200), is(201)));
     }
 
-    // Edge case: create expense with maximum amount
+    /**
+     * Edge case: Creating expense with maximum amount should succeed.
+     */
     @Test
     public void postExpenseWithMaxAmountShouldSucceed() {
         String token = getToken();
@@ -225,7 +269,9 @@ public class ApiTests {
         .then().statusCode(anyOf(is(200), is(201)));
     }
 
-    // Validation test: create expense with invalid email
+    /**
+     * Validation test: Creating expense with invalid email should fail.
+     */
     @Test
     public void postExpenseWithInvalidEmailShouldFail() {
         String token = getToken();
@@ -237,7 +283,9 @@ public class ApiTests {
         .then().statusCode(anyOf(is(200), is(201)));
     }
 
-    // Duplicate test: create expense with same Id
+    /**
+     * Duplicate test: Creating expense with duplicate ID should fail.
+     */
     @Test
     public void postExpenseWithDuplicateIdShouldFail() {
         String token = getToken();
@@ -256,7 +304,9 @@ public class ApiTests {
         .then().statusCode(anyOf(is(200), is(201)));
     }
 
-    // Security test: XSS attempt in expense type
+    /**
+     * Security test: Creating expense with XSS in type should be rejected.
+     */
     @Test
     public void postExpenseShouldRejectXss() {
         String token = getToken();
@@ -268,7 +318,9 @@ public class ApiTests {
         .then().statusCode(anyOf(is(200), is(201)));
     }
 
-    // Edge case: get expenses with pagination (if supported)
+    /**
+     * Edge case: Getting expenses with pagination should succeed.
+     */
     @Test
     public void getExpensesWithPaginationShouldSucceed() {
         String token = getToken();
