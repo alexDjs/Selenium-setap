@@ -113,6 +113,7 @@ public class E2ETests {
         driver.get(BASE_URL + "/");
         driver.findElement(By.id("email")).sendKeys("admin@mybank.com");
         driver.findElement(By.id("password")).sendKeys("wrongpass");
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-error")));
         String errorText = driver.findElement(By.id("login-error")).getText();
         assertTrue(errorText.contains("Invalid email or password"));
