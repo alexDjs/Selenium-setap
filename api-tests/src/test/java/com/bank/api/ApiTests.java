@@ -1,3 +1,4 @@
+
 package com.bank.api;
 
 import org.testng.annotations.Test;
@@ -81,22 +82,26 @@ public class ApiTests {
     public void putExpenseShouldChangeTypeAmountLocationForAllIds() {
         String token = getToken();
         // POST для Id=1,2,3 с логированием ответа
+        int[] backendIds = new int[3];
         for (int i = 1; i <= 3; i++) {
             Response postResponse = given().baseUri(BASE_URL)
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
-                .body("{\"ID\":\"" + i + "\",\"type\":\"Media Expert\",\"amount\":\"200\",\"direction\":\"out\",\"location\":\"Wroclaw\",\"product\":\"Product-" + i + "\"}")
+                .body("{\"Id\":\"" + i + "\",\"type\":\"Media Expert\",\"amount\":\"200\",\"direction\":\"out\",\"location\":\"Wroclaw\",\"product\":\"Product-" + i + "\"}")
             .post("/expenses");
+            int backendId = postResponse.jsonPath().getInt("id");
+            backendIds[i-1] = backendId;
             System.out.println("POST /expenses Response for Id=" + i + ": " + postResponse.asString());
         }
-        // PUT для Id=1,2,3 с логированием ответа
-        for (int i = 1; i <= 3; i++) {
+        // PUT для backend id
+        for (int i = 0; i < 3; i++) {
+            int backendId = backendIds[i];
             Response putResponse = given().baseUri(BASE_URL)
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
-                .body("{\"Id\":\"" + i + "\",\"type\":\"Biedronka\",\"amount\":\"100\",\"direction\":\"out\",\"location\":\"Krakow\",\"product\":\"Product-" + i + "\"}")
-            .put("/expenses/" + i);
-            System.out.println("PUT /expenses/" + i + " Response: " + putResponse.asString());
+                .body("{\"Id\":\"" + backendId + "\",\"type\":\"Biedronka\",\"amount\":\"100\",\"direction\":\"out\",\"location\":\"Krakow\",\"product\":\"Product-" + (i+1) + "\"}")
+            .put("/expenses/" + backendId);
+            System.out.println("PUT /expenses/" + backendId + " Response: " + putResponse.asString());
             putResponse.then().statusCode(anyOf(is(200), is(204)));
         }
     }
@@ -161,18 +166,24 @@ public class ApiTests {
     @Test
     public void postExpenseShouldAppearInList() {
         String token = getToken();
-        // POST новый расход
-        given().baseUri(BASE_URL)
+        // POST новый расход с Id=1 и логируем ответ
+        Response postResponse = given().baseUri(BASE_URL)
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + token)
-            .body("{\"Id\":\"101\",\"type\":\"Biedronka\",\"amount\":\"100\",\"direction\":\"out\",\"location\":\"Krakow\",\"product\":\"Product-101\"}")
-        .post("/expenses");
-        // GET и проверка, что расход появился (ищем по 'id' вместо 'Id')
-        given().baseUri(BASE_URL)
+            .body("{\"Id\":\"1\",\"type\":\"ZARA\",\"amount\":\"2000\",\"direction\":\"in\",\"location\":\"Wroclaw\"}")
+            .post("/expenses");
+        System.out.println("POST /expenses response: " + postResponse.asString());
+
+        // GET и логируем ответ
+        Response getResponse = given().baseUri(BASE_URL)
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer " + token)
-        .when().get("/expenses")
-        .then().statusCode(200);
+        .get("/expenses");
+        System.out.println("GET /expenses response: " + getResponse.asString());
+
+        // Проверка, что расход с Id="1" появился (id как строка)
+        getResponse.then().statusCode(200)
+            .body("find { it.id == '1' }", notNullValue());
     }
 
     /**
@@ -182,28 +193,33 @@ public class ApiTests {
     public void fullExpenseLifecycleTest() {
         String token = getToken();
         // POST: создать 3 расхода
+        int[] backendIds = new int[3];
         for (int i = 1; i <= 3; i++) {
-            given().baseUri(BASE_URL)
+            Response postResponse = given().baseUri(BASE_URL)
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .body("{\"Id\":\"" + i + "\",\"type\":\"Media Expert\",\"amount\":\"200\",\"direction\":\"out\",\"location\":\"Wroclaw\",\"product\":\"Product-" + i + "\"}")
             .post("/expenses");
+            int backendId = postResponse.jsonPath().getInt("id");
+            backendIds[i-1] = backendId;
         }
         // PUT: изменить все 3 расхода
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 0; i < 3; i++) {
+            int backendId = backendIds[i];
             given().baseUri(BASE_URL)
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
-                .body("{\"Id\":\"" + i + "\",\"type\":\"Biedronka\",\"amount\":\"100\",\"direction\":\"out\",\"location\":\"Krakow\",\"product\":\"Product-" + i + "\"}")
-            .when().put("/expenses/" + i)
+                .body("{\"Id\":\"" + backendId + "\",\"type\":\"Biedronka\",\"amount\":\"100\",\"direction\":\"out\",\"location\":\"Krakow\",\"product\":\"Product-" + (i+1) + "\"}")
+            .when().put("/expenses/" + backendId)
             .then().statusCode(anyOf(is(200), is(204)));
         }
         // DELETE: удалить все 3 расхода
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 0; i < 3; i++) {
+            int backendId = backendIds[i];
             given().baseUri(BASE_URL)
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
-            .when().delete("/expenses/" + i)
+            .when().delete("/expenses/" + backendId)
             .then().statusCode(anyOf(is(200), is(204)));
         }
         // GET: убедиться, что список пуст
