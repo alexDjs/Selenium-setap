@@ -94,7 +94,11 @@ public class E2ETests {
 
     @Test
     public void logoutShouldShowLoginForm() {
-        driver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        if (System.getenv("CI") != null) {
+            options.addArguments("--headless=new");
+        }
+        driver = new ChromeDriver(options);
         driver.get(BASE_URL + "/");
         driver.findElement(By.id("email")).sendKeys("admin@mybank.com");
         driver.findElement(By.id("password")).sendKeys("123456");
@@ -115,7 +119,11 @@ public class E2ETests {
         for (int i = 0; i < 3; i++) {
             createExpense(token, "E2E-Test", "10");
         }
-        driver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        if (System.getenv("CI") != null) {
+            options.addArguments("--headless=new");
+        }
+        driver = new ChromeDriver(options);
         driver.get(BASE_URL + "/");
         driver.findElement(By.id("email")).sendKeys(email);
         driver.findElement(By.id("password")).sendKeys(password);
@@ -130,7 +138,11 @@ public class E2ETests {
     @Test
     public void pageShouldBeAccessible() {
         try {
-            driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            if (System.getenv("CI") != null) {
+                options.addArguments("--headless=new");
+            }
+            driver = new ChromeDriver(options);
             driver.get(BASE_URL + "/");
             String title = driver.getTitle();
             System.out.println("Page title: " + title);
