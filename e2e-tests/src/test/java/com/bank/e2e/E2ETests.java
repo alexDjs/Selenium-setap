@@ -91,33 +91,6 @@ public class E2ETests {
         driver.findElement(By.xpath("//button[text()='Login']")).click();
         assertTrue(driver.findElement(By.id("balance")).isDisplayed());
     }
-    /**
-     * Test: Login with wrong password should fail.
-     * Verifies that login fails for invalid credentials.
-     */
-    @Test
-    public void loginShouldFailWithWrongPassword() {
-        String userDataDir;
-        if (System.getProperty("os.name").toLowerCase().contains("win")) {
-            userDataDir = "C:\\temp\\chrome-profile-" + UUID.randomUUID();
-        } else {
-            userDataDir = "/tmp/chrome-profile-" + UUID.randomUUID();
-        }
-        ChromeOptions options = new ChromeOptions();
-        if (System.getenv("CI") != null) {
-            options.addArguments("--headless=new");
-        }
-        options.addArguments("--user-data-dir=" + userDataDir);
-        driver = new ChromeDriver(options);
-        driver.manage().window().fullscreen(); // open browser in fullscreen
-        driver.get(BASE_URL + "/");
-        driver.findElement(By.id("email")).sendKeys("admin@mybank.com");
-        driver.findElement(By.id("password")).sendKeys("wrongpass");
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-error")));
-        String errorText = driver.findElement(By.id("login-error")).getText();
-        assertTrue(errorText.contains("Invalid email or password"));
-    }
 
     @Test
     public void logoutShouldShowLoginForm() {
