@@ -29,35 +29,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-m2-
 
-      - name: Run tests for each top-level module
-        run: |
-          set -o pipefail
-          # choose mvn or mvnw
-          if [ -f ./mvnw ]; then
-            MVN=./mvnw
-            chmod +x ./mvnw
-          else
-            MVN=mvn
-          fi
-
-          failed=0
-          echo "Detecting top-level module directories..."
-          for d in */ ; do
-            # skip hidden and config folders
-            if [ "$d" = ".github/" ] || [ "$d" = "node_modules/" ]; then
-              continue
-            fi
-            if [ -f "${d}pom.xml" ]; then
-              echo "\n=== Running tests in module: ${d%/} ==="
-              if ! $MVN -B -f "${d}pom.xml" test; then
-                echo "Tests failed in ${d%/}" >&2
-                failed=1
-              fi
-            fi
-          done
-
-          echo "\n=== Tests finished. Exit code: $failed ==="
-          exit $failed
+      - name: Run all tests (multi-module)
+        run: mvn -B test
 
       - name: Upload all surefire reports
         if: always()
