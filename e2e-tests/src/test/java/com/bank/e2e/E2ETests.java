@@ -16,15 +16,25 @@ import io.restassured.response.Response;
 import java.time.Duration;
 import java.util.UUID;
 
+/**
+ * End-to-end tests for MyBank web application.
+ * How to run locally:
+ * 1. Make sure Google Chrome is installed and chromedriver is available.
+ * 2. Run: mvn -pl e2e-tests test
+ * The browser will open in fullscreen mode for each test.
+ */
 public class E2ETests {
     private WebDriver driver;
     private final String BASE_URL = "https://mybank-8s6n.onrender.com";
 
+    /**
+     * After each test, close the browser with a short delay for stability.
+     */
     @AfterMethod
     public void tearDown() {
         if (driver != null) {
             try {
-                Thread.sleep(1000); // небольшая задержка перед quit
+                Thread.sleep(1000); // short delay before quit
             } catch (InterruptedException e) {
                 // ignore
             }
@@ -32,6 +42,9 @@ public class E2ETests {
         }
     }
 
+    /**
+     * Registers a new user and returns the authentication token.
+     */
     private String registerAndGetToken(String email, String password) {
         RestAssured.given().baseUri(BASE_URL).contentType(ContentType.JSON)
             .body("{\"email\":\"" + email + "\",\"password\":\"" + password + "\"}")
@@ -42,6 +55,9 @@ public class E2ETests {
         return loginRes.jsonPath().getString("token");
     }
 
+    /**
+     * Creates a new expense for the given user token.
+     */
     private void createExpense(String token, String type, String amount) {
         RestAssured.given().baseUri(BASE_URL)
             .contentType(ContentType.JSON)
@@ -50,6 +66,10 @@ public class E2ETests {
             .post("/expenses");
     }
 
+    /**
+     * Test: Successful login with valid credentials.
+     * Verifies that the balance is displayed after login.
+     */
     @Test
     public void loginShouldSucceed() {
         String userDataDir;
@@ -59,15 +79,22 @@ public class E2ETests {
             userDataDir = "/tmp/chrome-profile-" + UUID.randomUUID();
         }
         ChromeOptions options = new ChromeOptions();
+        if (System.getenv("CI") != null) {
+            options.addArguments("--headless=new");
+        }
         options.addArguments("--user-data-dir=" + userDataDir);
         driver = new ChromeDriver(options);
+        driver.manage().window().fullscreen(); // open browser in fullscreen
         driver.get(BASE_URL + "/");
         driver.findElement(By.id("email")).sendKeys("admin@mybank.com");
         driver.findElement(By.id("password")).sendKeys("123456");
         driver.findElement(By.xpath("//button[text()='Login']")).click();
         assertTrue(driver.findElement(By.id("balance")).isDisplayed());
     }
-
+    /**
+     * Test: Login with wrong password should fail.
+     * Verifies that login fails for invalid credentials.
+     */
     @Test
     public void loginShouldFailWithWrongPassword() {
         String userDataDir;
@@ -77,13 +104,15 @@ public class E2ETests {
             userDataDir = "/tmp/chrome-profile-" + UUID.randomUUID();
         }
         ChromeOptions options = new ChromeOptions();
+        if (System.getenv("CI") != null) {
+            options.addArguments("--headless=new");
+        }
         options.addArguments("--user-data-dir=" + userDataDir);
         driver = new ChromeDriver(options);
+        driver.manage().window().fullscreen(); // open browser in fullscreen
         driver.get(BASE_URL + "/");
         driver.findElement(By.id("email")).sendKeys("admin@mybank.com");
         driver.findElement(By.id("password")).sendKeys("wrongpass");
-        driver.findElement(By.xpath("//button[text()='Login']")).click();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-error")));
         String errorText = driver.findElement(By.id("login-error")).getText();
         assertTrue(errorText.contains("Invalid email or password"));
@@ -126,8 +155,18 @@ public class E2ETests {
 
     @Test
     public void pageShouldBeAccessible() {
-        driver = new ChromeDriver();
-        driver.get(BASE_URL + "/");
-        assertEquals(driver.getTitle(), "MyBank");
+        try {
+            driver = new ChromeDriver();
+            driver.get(BASE_URL + "/");
+            String title = driver.getTitle();
+            System.out.println("Page title: " + title);
+            assertEquals(title, "MyBank");
+        } catch (Exception e) {
+            System.out.println("Exception in pageShouldBeAccessible: " + e.getMessage());
+            if (driver != null) {
+                System.out.println("Page source: " + driver.getPageSource());
+            }
+            throw e;
+        }
     }
 }
