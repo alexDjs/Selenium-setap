@@ -5,6 +5,8 @@ import org.testng.annotations.AfterMethod;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import java.util.UUID;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import static org.testng.Assert.*;
@@ -21,6 +23,11 @@ public class E2ETests {
     @AfterMethod
     public void tearDown() {
         if (driver != null) {
+            try {
+                Thread.sleep(1000); // небольшая задержка перед quit
+            } catch (InterruptedException e) {
+                // ignore
+            }
             driver.quit();
         }
     }
@@ -45,7 +52,15 @@ public class E2ETests {
 
     @Test
     public void loginShouldSucceed() {
-        driver = new ChromeDriver();
+        String userDataDir;
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            userDataDir = "C:\\temp\\chrome-profile-" + UUID.randomUUID();
+        } else {
+            userDataDir = "/tmp/chrome-profile-" + UUID.randomUUID();
+        }
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--user-data-dir=" + userDataDir);
+        driver = new ChromeDriver(options);
         driver.get(BASE_URL + "/");
         driver.findElement(By.id("email")).sendKeys("admin@mybank.com");
         driver.findElement(By.id("password")).sendKeys("123456");
@@ -55,7 +70,15 @@ public class E2ETests {
 
     @Test
     public void loginShouldFailWithWrongPassword() {
-        driver = new ChromeDriver();
+        String userDataDir;
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            userDataDir = "C:\\temp\\chrome-profile-" + UUID.randomUUID();
+        } else {
+            userDataDir = "/tmp/chrome-profile-" + UUID.randomUUID();
+        }
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--user-data-dir=" + userDataDir);
+        driver = new ChromeDriver(options);
         driver.get(BASE_URL + "/");
         driver.findElement(By.id("email")).sendKeys("admin@mybank.com");
         driver.findElement(By.id("password")).sendKeys("wrongpass");
